@@ -1,13 +1,21 @@
-<h3>Contato (view)</h3>
+@extends('site.layouts.basico')
 
-<ul>
-    <li>
-        <a href="{{ route('site.index') }}">Principal</a>
-    </li>
-    <li>
-        <a href="{{ route('site.sobrenos') }}">Sobre Nós</a>
-    </li>
-    <li>
-        <a href="{{ route('site.contato') }}">Contato</a>
-    </li>
-</ul>
+@section('titulo', 'Contato')
+
+@section('conteudo')
+
+    <div class="conteudo-pagina">
+        <div class="titulo-pagina">
+            <h1>Entre em contato conosco</h1>
+        </div>
+
+        <div class="informacao-pagina">
+            <div class="contato-principal">
+                @component('site.layouts._components.form_contato', ['classe' => 'borda-preta'])
+                    <p>A nossa equipe analisará a sua mensagem e retornara o mais breve possível</p>
+                    <p>Nosso tempo médio de resposta é de 48hs</p>
+                @endcomponent
+            </div>
+        </div>  
+    </div>
+@endsection
