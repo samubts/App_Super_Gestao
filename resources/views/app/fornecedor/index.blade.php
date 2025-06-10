@@ -1,34 +1,33 @@
-<h3>Fornecedor</h3>
+@extends('app.layouts.basico')
 
-@php
+@section('titulo', 'Fornecedor')
+
+@section('conteudo')
     
-@endphp
+    <div class="conteudo-pagina">
+        <div class="titulo-pagina-2">
+            <p>Fornecedor</p>
+        </div>
 
-@isset($fornecedores)
-    @forelse ($fornecedores as $indice => $fornecedor)
-        Iteração atual:{{ $loop->iteration }}
-        <br>
-        Fornecedor: {{ $fornecedor['nome'] }}
-        <br>
-        Status: {{ $fornecedor['status'] }}
-        <br>
-        CNPJ: {{ $fornecedor['cnpj'] ?? 'Dado não informado' }}
-        <br>
-        Telefone: ({{ $fornecedor['ddd'] ?? 'Dado não informado' }}) 
-        {{ $fornecedor['telefone'] ?? 'Dado não informado' }}
-        <br>
-        @if ($loop->first)
-            Primeira iteração do loop
-        @endif
-        @if ($loop->last)
-            Última iteração do loop
+        <div class="menu">
+            <ul>
+                <li><a href="{{ route('app.fornecedor.adicionar') }}">Novo</a></li>
+                <li><a href="{{ route('app.fornecedor') }}">Consulta</a></li>
+            </ul>
+        </div>
 
-            <br>
-            Total de registros: {{ $loop->count }}
+        <div class="informacao-pagina">
+            <div style="width: 40%; margin-left: auto; margin-right: auto">
+                <form method="post" action="{{ route('app.fornecedor.listar') }}">
+                    @csrf
+                    <input type="text" name="nome" placeholder="Nome" class="borda-preta">
+                    <input type="text" name="site" placeholder="Site" class="borda-preta">
+                    <input type="text" name="uf" placeholder="UF" class="borda-preta">
+                    <input type="text" name="email" placeholder="E-mail" class="borda-preta">
+                    <button type="submit" class="borda-preta">Pesquisar</button>
+                <form>
+            </div>
+        </div>
+    </div>
 
-        @endif
-        <hr>
-    @empty
-        Não existe fornecedores cadastrados!!
-    @endforelse 
-@endisset
+@endsection
