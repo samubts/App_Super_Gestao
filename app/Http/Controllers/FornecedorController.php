@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Fornecedor;
 use Illuminate\Http\Request;
+use League\CommonMark\Extension\Footnote\Node\Footnote;
 
 class FornecedorController extends Controller
 {
@@ -17,16 +18,17 @@ class FornecedorController extends Controller
         ->where('site', 'like', '%'.$request->input('site').'%')
         ->where('uf', 'like', '%'.$request->input('uf').'%')
         ->where('email', 'like', '%'.$request->input('email').'%')
-        ->get();
+        ->paginate(18);
         
-        return view('app.fornecedor.listar', ['fornecedores' => $fornecedores]);
+        return view('app.fornecedor.listar', ['fornecedores' => $fornecedores, 'request' => $request->all()]);
     }
 
     public function adicionar(Request $request) {
 
         $msg = '';
 
-        if($request->input('_token') != '') {
+        // inclusão
+        if($request->input('_token') != '' && $request->input('id') =='') {
             $regras = [
                 'nome' => 'required|min:3|max:40',
                 'site' => 'required',
@@ -51,6 +53,32 @@ class FornecedorController extends Controller
             $msg = 'Cadastro realizado com sucesso!';
         }
 
+        // edição
+        if($request->input('_token') != '' && $request->input('id') !='') {
+            $fornecedor = Fornecedor::find($request->input('id'));
+            $update = $fornecedor->update($request->all());
+            
+            if($update) {
+                $msg = 'Update realizado com sucesso!';
+            } else {
+                $msg = 'Update aprezentou problemas...';
+            }
+
+            return redirect()->route('app.fornecedor.editar', ['id' => $request->input('id'), 'msg' => $msg]);
+        }
+
         return view('app.fornecedor.adicionar', ['msg' => $msg]);
+    }
+
+    public function editar($id, $msg = '') {
+        $fornecedor = Fornecedor::find($id);
+        
+        return view('app.fornecedor.adicionar', ['fornecedor' => $fornecedor, 'msg' => $msg]);
+    }
+
+    public function excluir($id) {
+        Fornecedor::find($id)->delete();
+
+        return redirect()->route('app.fornecedor');
     }
 }
