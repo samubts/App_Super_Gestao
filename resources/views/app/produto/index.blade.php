@@ -63,6 +63,8 @@
                     </tbody>
                 </table>
 
+                <br>
+
                 {{ $produtos->appends($request)->links() }}
 
                 {{ $produtos->count() }} produtos de {{ $produtos->total() }} (de {{ $produtos->firstItem() }} a {{ $produtos->lastItem() }})
